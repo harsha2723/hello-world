@@ -5,7 +5,7 @@ pipeline {
     }
 
     stages {
-        stage('continous download_chat') {
+        stage('continous download_audio') {
             steps {
                 git 'https://github.com/harsha2723/hello-world.git'
             }
