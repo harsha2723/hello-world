@@ -5,106 +5,147 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Message</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2b2b2b;
-            color: #ecf0f1;
-            line-height: 1.6;
+        /* Basic Reset */
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1d1f21;
+            color: #f0f0f0;
+            line-height: 1.8;
             padding: 20px;
+            min-height: 100vh;
         }
+
         .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background-color: #1f1f1f;
-            padding: 20px 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #2c2f33;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            transition: 0.3s ease;
         }
+
         h1 {
             text-align: center;
-            color: #f39c12;
+            color: #f9ca24;
             margin-bottom: 40px;
-            font-size: 2.4em;
+            font-size: 2.5em;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        h1 .highlight-names {
+            color: #ff7979;
+        }
+
+        h2 {
+            color: #e1e1e1;
+            font-size: 1.8em;
+            font-weight: 500;
+            background-color: #444b6e;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        p {
+            color: #dcdde1;
+            font-size: 1.1em;
+            padding: 15px 20px;
+            background-color: #303641;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .highlight {
+            color: #f9ca24;
             font-weight: 600;
         }
-        h1 .highlight-names {
-            color: #e74c3c;
-        }
-        h2 {
-            color: #ffffff;
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            border-radius: 5px;
-        }
-        p {
-            color: #ecf0f1;
-            font-size: 1.1em;
-            margin-bottom: 20px;
-            text-align: justify;
-            padding: 10px;
-            border-left: 5px solid #f39c12;
-            border-radius: 5px;
-        }
-        .highlight {
-            color: #f39c12;
-            font-weight: 500;
-        }
+
         .closing {
             font-size: 1.2em;
             text-align: center;
-            color: #f39c12;
-            font-style: italic;
+            color: #f9ca24;
             margin-top: 30px;
-            border-top: 1px solid #bdc3c7;
-            padding-top: 20px;
-            background-color: #1d1d1d;
-            border-radius: 5px;
-            padding: 15px;
+            padding: 20px;
+            background-color: #2e3a47;
+            border-radius: 8px;
+            border: 1px solid #bdc3c7;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
         }
-        /* Section Specific Background Colors */
-        #amal-section {
-            background-color: #3b3b6d;
-        }
-        #ashwin-section {
-            background-color: #602437;
-        }
-        #krishna-section {
-            background-color: #2c3e50;
-        }
-        #nizma-section {
-            background-color: #204f38;
-        }
-        #samyukth-section {
-            background-color: #5e4b12;
-        }
-        #sara-section {
-            background-color: #583822;
-        }
-        #surya-section {
-            background-color: #1a535c;
-        }
+
         /* Button Styling */
-        .container .button {
+        .button {
             display: block;
             text-align: center;
-            margin: 40px auto 0;
+            margin: 50px auto 0;
         }
+
         .button a {
             text-decoration: none;
-            background-color: #f39c12;
+            background-color: #f9ca24;
             color: #2c3e50;
             padding: 12px 25px;
             border-radius: 25px;
             font-size: 1.2em;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: 0.3s ease;
         }
+
         .button a:hover {
-            background-color: #e67e22;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+            background-color: #e1b12c;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
+
+        /* Hover Effect */
+        .container:hover {
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Individual Sections Background Color */
+        #amal-section {
+            background-color: #3d5af1;
+        }
+
+        #ashwin-section {
+            background-color: #f0932b;
+        }
+
+        #krishna-section {
+            background-color: #6ab04c;
+        }
+
+        #nizma-section {
+            background-color: #eb4d4b;
+        }
+
+        #samyukth-section {
+            background-color: #f6e58d;
+        }
+
+        #sara-section {
+            background-color: #22a6b3;
+        }
+
+        #surya-section {
+            background-color: #badc58;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9em;
+            color: #95a5a6;
+        }
+
     </style>
 </head>
 <body>
@@ -113,12 +154,10 @@
     <h1>Welcome to Terawe Technologies! <br>
         <span class="highlight-names">Amal, Ashwin, Krishna Priya, Nizma, Samyukth, Sara, Surya</span>
     </h1>
-    
+
     <p>Hello <span class="highlight">Amal</span>, Ashwin, Krishna Priya, Nizma, Samyukth, Sara, and Surya,</p>
 
-    <p>
-        I’d like to extend a warm welcome to all of you as we embark on this exciting journey together at Terawe Technologies. Wishing each of you the very best as we move forward.
-    </p>
+    <p>I’d like to extend a warm welcome to all of you as we embark on this exciting journey together at Terawe Technologies. Wishing each of you the very best as we move forward.</p>
 
     <p>Here are my personal observations about each of you—please don’t mind if I get anything wrong!</p>
 
@@ -168,12 +207,14 @@
         Finally, remember to always believe in yourself and live in the moment. Good luck to each and every one of you!
     </p>
 
-    <div class="closing">Best wishes,<br>Harsha</div>
-    
     <div class="button">
         <a href="#">Let's Begin the Journey</a>
     </div>
 </div>
+
+<footer>
+    <p>Best wishes,<br>Harsha</p>
+</footer>
 
 </body>
 </html>
