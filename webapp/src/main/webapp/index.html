@@ -1,20 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Deploy Web App with Multiple images</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Web App with Multiple Images</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            margin-top: 50px;
+            color: #999;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to Our First Web App!</h1>
-    <p>Below are seven  deployed with the web app and apologies for using your photographs without your permission:</p>
+    <p>Below are seven images deployed with the web app. Apologies for using your photographs without your permission:</p>
 
-    <div>
-        <img src="amal.JPEG" alt="Image 1" width="300" height="200">
-        <img src="ashwin.JPEG" alt="Image 2" width="300" height="200">
-        <img src="krishnapriya.JPEG" alt="Image 3" width="300" height="200">
-        <img src="nizma.JPEG" alt="Image 4" width="300" height="200">
-        <img src="samyukth.JPEG" alt="Image 5" width="300" height="200">
-        <img src="sara.JPEG" alt="Image 6" width="300" height="200">
-        <img src="surya.JPEG" alt="Image 7" width="300" height="200">
+    <div class="gallery">
+        <img src="amal.JPEG" alt="Amal">
+        <img src="ashwin.JPEG" alt="Ashwin">
+        <img src="krishnapriya.JPEG" alt="Krishnapriya">
+        <img src="nizma.JPEG" alt="Nizma">
+        <img src="samyukth.JPEG" alt="Samyukth">
+        <img src="sara.JPEG" alt="Sara">
+        <img src="surya.JPEG" alt="Surya">
     </div>
+
+    <footer>
+        &copy; 2024 Our Web App | All Rights Reserved
+    </footer>
 </body>
 </html>
