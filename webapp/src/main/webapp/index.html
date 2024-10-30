@@ -3,125 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Images Inside a Bus</title>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0; /* Light background */
-        }
-
-        .header {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 36px;
-            font-weight: 700;
-        }
-
-        .bus {
-            position: relative;
-            width: 100%;
-            max-width: 1200px;
-            height: 400px; /* Adjust height as needed */
-            background-image: url('https://via.placeholder.com/1200x400.png?text=Bus+Image'); /* Replace with your bus image URL */
-            background-size: cover;
-            background-position: center;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
-            position: absolute; /* Position images on top of the bus */
-            top: 50%; /* Center vertically */
-            left: 50%; /* Center horizontally */
-            transform: translate(-50%, -50%); /* Center transform */
-            width: 90%; /* Width of the image container */
-            height: 80%; /* Height of the image container */
-            overflow: hidden; /* Prevent overflow */
-        }
-
-        .image-container {
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
-        }
-
-        .image-container:hover {
-            transform: scale(1.05);
-        }
-
-        img {
-            width: 100%;
-            height: auto; /* Maintain aspect ratio */
-            object-fit: cover; /* Ensures images fill the container */
-        }
-
-        footer {
-            margin-top: 20px;
-            color: #333;
-            text-align: center;
-            font-size: 14px;
-        }
-
-        footer a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <title>Bus Poster</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div class="header">
-        <h1>Images Inside a Bus</h1>
-    </div>
-
-    <div class="bus">
-        <div class="gallery">
-            <div class="image-container">
-                <img src="Amal-new.JPEG" alt="Amal">
-            </div>
-            <div class="image-container">
-                <img src="ashwin.JPEG" alt="Ashwin">
-            </div>
-            <div class="image-container">
-                <img src="Krishna-Priya.JPEG" alt="Krishnapriya">
-            </div>
-            <div class="image-container">
-                <img src="Nizma-new.JPEG" alt="Nizma">
-            </div>
-            <div class="image-container">
-                <img src="Samyukth-new.JPEG" alt="Samyukth">
-            </div>
-            <div class="image-container">
-                <img src="sara-new.JPEG" alt="Sara">
-            </div>
-            <div class="image-container">
-                <img src="surya.JPEG" alt="Surya">
-            </div>
+    <div class="poster">
+        <img src="bus-image.jpg" alt="Bus" class="bus-image">
+        <div class="images-container">
+            <img src="Amal-new.JPEG" alt="Image 1" class="overlay-image">
+            <img src="ashwin.JPEG" alt="Image 2" class="overlay-image">
+            <img src="Krishna-Priya.JPEG" alt="Image 3" class="overlay-image">
+            <img src="Nizma-new.JPEG" alt="Image 4" class="overlay-image">
+            <img src="Samyukth-new.JPEG" alt="Image 5" class="overlay-image">
+            <img src="sara-new.JPEG" alt="Image 6" class="overlay-image">
+            <img src="surya.JPEG" alt="Image 7" class="overlay-image">
         </div>
     </div>
-
-    <footer>
-        &copy; 2024 Images Inside a Bus | <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
-    </footer>
-
+    <script src="script.js"></script>
 </body>
 </html>
