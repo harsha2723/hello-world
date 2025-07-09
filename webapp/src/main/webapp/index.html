@@ -167,7 +167,6 @@
     }
 
     .happy-birthday {
-        position:Pluto 4.2.4
         position: absolute;
         top: 50%;
         left: 50%;
@@ -288,6 +287,22 @@
         100% { transform: translate(60px, -40px) rotate(20deg); opacity: 0; }
     }
 
+    .comet-trail {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: #fff;
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 11;
+        animation: comet-trail-animation 1s ease-in-out forwards;
+    }
+
+    @keyframes comet-trail-animation {
+        0% { transform: translate(0, 0); opacity: 0.8; }
+        100% { transform: translate(-20px, 10px); opacity: 0; }
+    }
+
     .firework-spark {
         position: absolute;
         width: 4px;
@@ -346,15 +361,43 @@
         width: 20px;
         height: 40px;
         background: var(--color);
-        border-radius: 50% 50% 0 0;
         opacity: 0;
         z-index: 9;
         animation: bloom 2s ease-in-out forwards;
+        box-shadow: 0 0 10px var(--color);
+        animation: bloom 2s ease-in-out forwards, petal-glow 3s ease-in-out infinite;
+    }
+
+    .petal.oval {
+        border-radius: 50% 50% 0 0;
+    }
+
+    .petal.teardrop {
+        border-radius: 50% 50% 20% 20%;
+    }
+
+    .petal.heart {
+        clip-path: path('M10,5 Q10,0 15,0 Q20,0 20,5 Q20,10 10,20 Q0,10 0,5 Q0,0 5,0 Q10,0 10,5');
     }
 
     @keyframes bloom {
         0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 1; }
         100% { transform: translate(var(--x), var(--y)) scale(1) rotate(var(--r)); opacity: 0.5; }
+    }
+
+    @keyframes petal-glow {
+        0% { box-shadow: 0 0 10px var(--color); }
+        50% { box-shadow: 0 0 15px var(--color); }
+        100% { box-shadow: 0 0 10px var(--color); }
+    }
+
+    .petal.falling {
+        animation: fall 3s ease-in-out forwards;
+    }
+
+    @keyframes fall {
+        0% { transform: translate(var(--x), var(--y)) scale(1) rotate(var(--r)); opacity: 0.5; }
+        100% { transform: translate(var(--x), 150px) scale(0.8) rotate(calc(var(--r) + 180deg)); opacity: 0; }
     }
 
     .star {
@@ -560,7 +603,7 @@
             renderer.render(scene, camera);
         }
 
-        // Function to create comets
+        // Function to create comets with sparkle trails
         function createComets() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
@@ -572,6 +615,17 @@
                 const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 1.5;
                 comet.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
                 comet.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                // Add sparkle trail
+                for (let j = 0; j < 3; j++) {
+                    const trail = document.createElement('div');
+                    trail.classList.add('comet-trail');
+                    document.querySelector('.image-container').appendChild(trail);
+                    trail.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
+                    trail.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                    setTimeout(() => {
+                        trail.remove();
+                    }, 1000);
+                }
                 setTimeout(() => {
                     comet.remove();
                 }, 2500);
@@ -645,13 +699,19 @@
         }
 
         // Function to create flower petals
-        function createPetals() {
+        function createPetals(delay = 0) {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
             const colors = ['#00FF7F', '#800080', '#DC143C'];
+            const shapes = ['oval', 'teardrop', 'heart'];
             for (let i = 0; i < 8; i++) {
                 const petal = document.createElement('div');
                 petal.classList.add('petal');
+                const shape = shapes[Math.floor(Math.random() * 3)];
+                petal.classList.add(shape);
+                if (i >= 4 && delay === 0) {
+                    petal.classList.add('falling');
+                }
                 document.querySelector('.image-container').appendChild(petal);
                 const angle = (i / 8) * 360;
                 const distance = 60;
@@ -665,7 +725,7 @@
                 petal.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2}px`;
                 setTimeout(() => {
                     petal.remove();
-                }, 2000);
+                }, petal.classList.contains('falling') ? 3000 : 2000);
             }
         }
 
@@ -686,7 +746,8 @@
                         fadeOverlay.classList.remove('show');
                         createFireworks();
                         createConfetti();
-                        createPetals();
+                        createPetals(0);
+                        setTimeout(() => createPetals(500), 500);
                         setInterval(createComets, 800);
                     }, 1000);
                 } else {
@@ -710,7 +771,8 @@
                 fadeOverlay.classList.remove('show');
                 createFireworks();
                 createConfetti();
-                createPetals();
+                createPetals(0);
+                setTimeout(() => createPetals(500), 500);
                 setInterval(createComets, 800);
             }, 1000);
         }
