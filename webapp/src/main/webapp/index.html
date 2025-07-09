@@ -170,39 +170,39 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, 200%) scale(0.3) rotateY(60deg);
+        transform: translate(-50%, 200%) scale(0.3);
         perspective: 1000px;
         font-family: 'Playfair Display', 'Times New Roman', serif;
         font-size: 3.5em;
         font-weight: 700;
         color: var(--green);
         text-shadow: 0 0 15px var(--green), 0 0 25px var(--purple), 0 0 35px var(--red);
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(15, 28, 46, 0.9));
+        background: linear-gradient(to bottom, #4A4A4A, #2A2A2A); /* Stone-carved effect */
         padding: 20px 40px;
         border-radius: 12px;
         border: 4px solid var(--green);
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.2);
         opacity: 0;
         transition: opacity 1.5s ease, transform 1.5s ease;
         z-index: 10;
-        animation: pulse-glow 3s ease-in-out infinite, tilt 4s ease-in-out infinite 1.5s;
+        animation: stone-crack 2s ease-in-out forwards, pulse-glow 3s ease-in-out infinite 2s;
     }
 
     .happy-birthday.show {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1) rotateY(0deg);
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    @keyframes stone-crack {
+        0% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); opacity: 0; }
+        50% { clip-path: polygon(0% 0%, 50% 20%, 100% 0%, 100% 100%, 50% 80%, 0% 100%); opacity: 0.5; }
+        100% { clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); opacity: 1; }
     }
 
     @keyframes pulse-glow {
         0% { text-shadow: 0 0 15px var(--green), 0 0 25px var(--purple), 0 0 35px var(--red); }
         50% { text-shadow: 0 0 25px var(--green), 0 0 35px var(--purple), 0 0 45px var(--red); }
         100% { text-shadow: 0 0 15px var(--green), 0 0 25px var(--purple), 0 0 35px var(--red); }
-    }
-
-    @keyframes tilt {
-        0% { transform: translate(-50%, -50%) scale(1) rotateY(0deg) rotateX(0deg); }
-        50% { transform: translate(-50%, -50%) scale(1) rotateY(5deg) rotateX(3deg); }
-        100% { transform: translate(-50%, -50%) scale(1) rotateY(0deg) rotateX(0deg); }
     }
 
     .happy-birthday::before {
@@ -235,10 +235,10 @@
         left: -100%;
         width: 300%;
         height: 300%;
-        background: radial-gradient(circle, rgba(0, 255, 127, 0.3), rgba(128, 0, 128, 0.2), transparent);
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 255, 127, 0.3), transparent);
         filter: blur(20px);
         opacity: 0;
-        animation: aura 3s ease-in-out infinite;
+        animation: waterfall-mist 4s ease-in-out infinite;
         z-index: 8;
     }
 
@@ -246,10 +246,10 @@
         opacity: 0.5;
     }
 
-    @keyframes aura {
-        0% { transform: scale(0.8); opacity: 0.5; }
-        50% { transform: scale(1.2); opacity: 0.7; }
-        100% { transform: scale(0.8); opacity: 0.5; }
+    @keyframes waterfall-mist {
+        0% { transform: translateY(0); opacity: 0.5; }
+        50% { transform: translateY(50px); opacity: 0.7; }
+        100% { transform: translateY(100px); opacity: 0.5; }
     }
 
     .lens-flare {
@@ -293,6 +293,24 @@
         transform: translateY(0);
     }
 
+    .lidar-scan {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 2px solid rgba(0, 255, 127, 0.3);
+        opacity: 0;
+        animation: lidar-scan 2s ease-in-out forwards;
+        z-index: 9;
+    }
+
+    @keyframes lidar-scan {
+        0% { transform: scale(0.5); opacity: 0.5; }
+        50% { transform: scale(1); opacity: 0.8; }
+        100% { transform: scale(1.2); opacity: 0; }
+    }
+
     .comet {
         position: absolute;
         width: 15px;
@@ -306,24 +324,24 @@
 
     @keyframes comet-animation {
         0% { transform: translate(0, 0) scale(1); opacity: 1; }
-        50% { transform: translate(30px, -20px) rotate(10deg); opacity: 0.7; }
-        100% { transform: translate(60px, -40px) rotate(20deg); opacity: 0; }
+        50% { transform: translate(50px, -30px) rotate(15deg); opacity: 0.7; }
+        100% { transform: translate(100px, -60px) rotate(30deg); opacity: 0; }
     }
 
     .comet-trail {
         position: absolute;
-        width: 3px;
-        height: 3px;
-        background: #fff;
+        width: 4px;
+        height: 4px;
+        background: linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
         border-radius: 50%;
         opacity: 0;
         z-index: 11;
-        animation: comet-trail-animation 1s ease-in-out forwards;
+        animation: comet-trail-animation 1.5s ease-in-out forwards;
     }
 
     @keyframes comet-trail-animation {
         0% { transform: translate(0, 0); opacity: 0.8; }
-        100% { transform: translate(-20px, 10px); opacity: 0; }
+        100% { transform: translate(-30px, 15px); opacity: 0; }
     }
 
     .firework-spark {
@@ -477,6 +495,39 @@
         100% { transform: translate(-50%, -50%) translateX(var(--x)) translateY(var(--y)) rotate(360deg); opacity: 0.8; }
     }
 
+    .bird {
+        position: absolute;
+        width: 15px;
+        height: 10px;
+        background: radial-gradient(circle, var(--color), transparent);
+        clip-path: polygon(0% 50%, 30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%);
+        opacity: 0;
+        z-index: 9;
+        animation: bird-fly 5s ease-in-out forwards;
+    }
+
+    @keyframes bird-fly {
+        0% { transform: translate(-50%, -50%) translateX(var(--x)) translateY(var(--y)) scale(0.5); opacity: 0.8; }
+        50% { transform: translate(-50%, -50%) translateX(calc(var(--x) * 1.5)) translateY(calc(var(--y) * 1.5)) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) translateX(calc(var(--x) * 2)) translateY(calc(var(--y) * 2)) scale(0.5); opacity: 0; }
+    }
+
+    .bird-trail {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background: radial-gradient(circle, var(--color), transparent);
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 9;
+        animation: bird-trail 1s ease-in-out forwards;
+    }
+
+    @keyframes bird-trail {
+        0% { transform: translate(0, 0); opacity: 0.8; }
+        100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+    }
+
     .star {
         position: absolute;
         width: 4px;
@@ -528,6 +579,7 @@
         .happy-birthday { font-size: 2em; padding: 12px 24px; }
         .petal { width: 15px; height: 30px; }
         .orb { width: 8px; height: 8px; }
+        .bird { width: 10px; height: 7px; }
     }
 </style>
 </head>
@@ -567,6 +619,7 @@
             <div class="happy-birthday" id="happyBirthdayText">
                 <span class="trail"></span>
                 <div class="lens-flare"></div>
+                <div class="lidar-scan"></div>
                 Happy Birthday
             </div>
         </div>
@@ -599,7 +652,7 @@
         slides[currentSlide].classList.add('show');
         audio.play();
 
-        // WebGL setup
+        // WebGL setup for particles and mist
         const canvas = document.getElementById('webglCanvas');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
@@ -616,6 +669,7 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
+        // Particle cloud (existing)
         const particlesGeometry = new THREE.BufferGeometry();
         const particleCount = 100;
         const positions = new Float32Array(particleCount * 3);
@@ -672,21 +726,67 @@
 
         const particles = new THREE.Points(particlesGeometry, particleMaterial);
         scene.add(particles);
+
+        // WebGL mist for waterfall effect
+        const mistGeometry = new THREE.BufferGeometry();
+        const mistCount = 50;
+        const mistPositions = new Float32Array(mistCount * 3);
+        const mistSizes = new Float32Array(mistCount);
+
+        for (let i = 0; i < mistCount; i++) {
+            mistPositions[i * 3] = (Math.random() - 0.5) * 8;
+            mistPositions[i * 3 + 1] = (Math.random() - 0.5) * 8;
+            mistPositions[i * 3 + 2] = (Math.random() - 0.5) * 8;
+            mistSizes[i] = Math.random() * 0.2 + 0.1;
+        }
+
+        mistGeometry.setAttribute('position', new THREE.BufferAttribute(mistPositions, 3));
+        mistGeometry.setAttribute('size', new THREE.BufferAttribute(mistSizes, 1));
+
+        const mistMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 }
+            },
+            vertexShader: `
+                attribute float size;
+                uniform float uTime;
+                void main() {
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    gl_PointSize = size * (300.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                    gl_PointSize *= (1.0 + sin(uTime + position.y) * 0.5);
+                }
+            `,
+            fragmentShader: `
+                void main() {
+                    float dist = length(gl_PointCoord - vec2(0.5));
+                    if (dist > 0.5) discard;
+                    gl_FragColor = vec4(1.0, 1.0, 1.0, 0.5 - dist);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending
+        });
+
+        const mist = new THREE.Points(mistGeometry, mistMaterial);
+        scene.add(mist);
         camera.position.z = 5;
 
         function animateWebGL() {
             if (!webglActive) return;
             requestAnimationFrame(animateWebGL);
             particleMaterial.uniforms.uTime.value += 0.05;
+            mistMaterial.uniforms.uTime.value += 0.03;
             particles.rotation.y += 0.01;
+            mist.rotation.y += 0.005;
             renderer.render(scene, camera);
         }
 
-        // Function to create comets with sparkle trails
+        // Function to create comets with smoky trails
         function createComets() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < 12; i++) {
                 const comet = document.createElement('div');
                 comet.classList.add('comet');
                 document.querySelector('.image-container').appendChild(comet);
@@ -694,8 +794,8 @@
                 const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 1.5;
                 comet.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
                 comet.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
-                // Add sparkle trail
-                for (let j = 0; j < 3; j++) {
+                // Add smoky trails
+                for (let j = 0; j < 4; j++) {
                     const trail = document.createElement('div');
                     trail.classList.add('comet-trail');
                     document.querySelector('.image-container').appendChild(trail);
@@ -703,7 +803,7 @@
                     trail.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
                     setTimeout(() => {
                         trail.remove();
-                    }, 1000);
+                    }, 1500);
                 }
                 setTimeout(() => {
                     comet.remove();
@@ -711,7 +811,7 @@
             }
         }
 
-        // Function to create fireworks
+        // Function to create fireworks with fluid trails
         function createFireworks() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
@@ -732,6 +832,20 @@
                     const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 0.5;
                     firework.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
                     firework.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                    // Add fluid trail
+                    for (let j = 0; j < 2; j++) {
+                        const trail = document.createElement('div');
+                        trail.classList.add('comet-trail');
+                        trail.style.background = `linear-gradient(to right, ${colors[Math.floor(Math.random() * 3)]}, transparent)`;
+                        document.querySelector('.image-container').appendChild(trail);
+                        trail.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
+                        trail.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                        trail.style.setProperty('--x', `${(Math.random() - 0.5) * 20}px`);
+                        trail.style.setProperty('--y', `${(Math.random() - 0.5) * 20}px`);
+                        setTimeout(() => {
+                            trail.remove();
+                        }, 1000);
+                    }
                     setTimeout(() => {
                         firework.remove();
                     }, type === 'spark' ? 1500 : type === 'orb' ? 2000 : 2500);
@@ -839,13 +953,50 @@
                 document.querySelector('.image-container').appendChild(orb);
                 const angle = (i / 6) * 360;
                 const x = Math.cos(angle * Math.PI / 180) * 100;
-                const y = Math.sin(angle * Math.PI / 180) * 50; // Elliptical orbit
+                const y = Math.sin(angle * Math.PI / 180) * 50;
                 orb.style.setProperty('--x', `${x}px`);
                 orb.style.setProperty('--y', `${y}px`);
                 orb.style.setProperty('--color', colors[i % 3]);
                 orb.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2}px`;
                 orb.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2}px`;
                 orb.style.animationDelay = `${(i / 6) * 4}s`;
+            }
+        }
+
+        // Function to create CGI birds
+        function createBirds() {
+            const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
+            const containerRect = document.querySelector('.image-container').getBoundingClientRect();
+            const colors = ['#00FF7F', '#800080', '#DC143C'];
+            for (let i = 0; i < 4; i++) {
+                const bird = document.createElement('div');
+                bird.classList.add('bird');
+                document.querySelector('.image-container').appendChild(bird);
+                const angle = (i / 4) * 360;
+                const x = Math.cos(angle * Math.PI / 180) * 80;
+                const y = Math.sin(angle * Math.PI / 180) * 60;
+                bird.style.setProperty('--x', `${x}px`);
+                bird.style.setProperty('--y', `${y}px`);
+                bird.style.setProperty('--color', colors[i % 3]);
+                bird.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2}px`;
+                bird.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2}px`;
+                // Add bird trail
+                for (let j = 0; j < 2; j++) {
+                    const trail = document.createElement('div');
+                    trail.classList.add('bird-trail');
+                    trail.style.setProperty('--color', colors[i % 3]);
+                    document.querySelector('.image-container').appendChild(trail);
+                    trail.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + x}px`;
+                    trail.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + y}px`;
+                    trail.style.setProperty('--x', `${(Math.random() - 0.5) * 15}px`);
+                    trail.style.setProperty('--y', `${(Math.random() - 0.5) * 15}px`);
+                    setTimeout(() => {
+                        trail.remove();
+                    }, 1000);
+                }
+                setTimeout(() => {
+                    bird.remove();
+                }, 5000);
             }
         }
 
@@ -871,6 +1022,7 @@
                         setTimeout(() => createPetals(600), 600);
                         setTimeout(() => createPetals(900), 900);
                         createOrbs();
+                        createBirds();
                         setInterval(createComets, 800);
                     }, 1000);
                 } else {
@@ -899,6 +1051,7 @@
                 setTimeout(() => createPetals(600), 600);
                 setTimeout(() => createPetals(900), 900);
                 createOrbs();
+                createBirds();
                 setInterval(createComets, 800);
             }, 1000);
         }
