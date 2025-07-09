@@ -34,7 +34,6 @@
         overflow: hidden;
     }
 
-    /* Glowing Border Effect */
     .container {
         max-width: 100%;
         width: 800px;
@@ -51,14 +50,9 @@
         overflow-y: auto;
     }
 
-    /* Keyframe for glowing border effect */
     @keyframes glowing-border {
-        0% {
-            border-color: #4A90E2;
-        }
-        100% {
-            border-color: #FFD700;
-        }
+        0% { border-color: #4A90E2; }
+        100% { border-color: #FFD700; }
     }
 
     h1 {
@@ -103,33 +97,52 @@
         background-color: #3A7BD5;
     }
 
-    /* Image reveal with a slight zoom */
     .image-container {
         position: relative;
         display: inline-block;
         width: 100%;
         height: auto;
         overflow: hidden;
+        margin-top: 30px;
     }
 
-    #groupImage {
+    .slide {
         max-width: 100%;
         width: 100%;
         border-radius: 12px;
-        margin-top: 30px;
         visibility: hidden;
         opacity: 0;
         transform: scale(0.8);
         transition: opacity 12s ease, transform 12s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 
-    #groupImage.show {
+    .slide.show {
         visibility: visible;
         opacity: 1;
         transform: scale(1);
+        position: relative;
     }
 
-    /* Animated Stars and Glitters */
+    .happy-birthday {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #FFD700;
+        font-size: 2.5em;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        transition: opacity 1s ease;
+    }
+
+    .happy-birthday.show {
+        opacity: 1;
+    }
+
     .star {
         position: absolute;
         width: 4px;
@@ -141,21 +154,11 @@
     }
 
     @keyframes glitter-animation {
-        0% {
-            transform: translate3d(0, 0, 0) scale(0);
-            opacity: 1;
-        }
-        50% {
-            transform: translate3d(15px, 15px, 0) scale(1);
-            opacity: 0.5;
-        }
-        100% {
-            transform: translate3d(30px, -20px, 0) scale(0);
-            opacity: 0;
-        }
+        0% { transform: translate3d(0, 0, 0) scale(0); opacity: 1; }
+        50% { transform: translate3d(15px, 15px, 0) scale(1); opacity: 0.5; }
+        100% { transform: translate3d(30px, -20px, 0) scale(0); opacity: 0; }
     }
 
-    /* Firefly Animation (floating bubbles) */
     .firefly {
         position: absolute;
         width: 6px;
@@ -167,62 +170,14 @@
     }
 
     @keyframes firefly-animation {
-        0% {
-            transform: translate(0, 0) scale(1);
-            opacity: 1;
-        }
-        100% {
-            transform: translate(100px, 100px) scale(0);
-            opacity: 0;
-        }
+        0% { transform: translate(0, 0) scale(1); opacity: 1; }
+        100% { transform: translate(100px, 100px) scale(0); opacity: 0; }
     }
 
-    /* Confetti with background shake */
-    @keyframes confetti-shake {
-        0% { transform: rotate(0deg); }
-        50% { transform: rotate(15deg); }
-        100% { transform: rotate(0deg); }
-    }
-
-    .confetti {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 10px;
-        height: 10px;
-        background-color: #FFD700;
-        animation: confetti-shake 1s ease-in-out infinite;
-        pointer-events: none;
-    }
-
-    /* Bounce and zoom animation */
-    .bounce-zoom {
-        animation: bounce-zoom 2s ease-in-out infinite;
-    }
-
-    @keyframes bounce-zoom {
-        0% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.2);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    /* Color Changing Background */
     @keyframes gradient-background {
-        0% {
-            background: linear-gradient(45deg, #0F1C2E, #4A90E2);
-        }
-        50% {
-            background: linear-gradient(45deg, #FDCB82, #FF6F61);
-        }
-        100% {
-            background: linear-gradient(45deg, #0F1C2E, #4A90E2);
-        }
+        0% { background: linear-gradient(45deg, #0F1C2E, #4A90E2); }
+        50% { background: linear-gradient(45deg, #FDCB82, #FF6F61); }
+        100% { background: linear-gradient(45deg, #0F1C2E, #4A90E2); }
     }
 
     .footer {
@@ -232,22 +187,11 @@
     }
 
     @media (max-width: 768px) {
-        .container {
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 2em;
-        }
-
-        .message {
-            font-size: 1em;
-        }
-
-        #showImageButton {
-            padding: 10px 20px;
-            font-size: 0.9em;
-        }
+        .container { padding: 20px; }
+        h1 { font-size: 2em; }
+        .message { font-size: 1em; }
+        #showImageButton { padding: 10px 20px; font-size: 0.9em; }
+        .happy-birthday { font-size: 1.5em; }
     }
 </style>
 </head>
@@ -279,12 +223,11 @@
         <p>See you on other side of Life!!</p>
         <div id="showImageButton">Reveal Memories</div>
 
-        <!-- Image and sparkles -->
         <div class="image-container">
-          <img class="slideshow-image" src="money1.jpeg" alt="Slide 1">
-          <img class="slideshow-image" src="money2.jpeg" alt="Slide 2">
-          <img class="slideshow-image" src="money.jpeg" alt="Slide 3">
-          <div id="finalMessage">🎉 Happy Birthday 🎉</div>
+            <img class="slide" src="money.jpeg" alt="Memory Photo 1">
+            <img class="slide" src="money1.jpeg" alt="Memory Photo 2">
+            <img class="slide" src="money2.jpeg" alt="Memory Photo 3">
+            <div class="happy-birthday" id="happyBirthdayText">Happy Birthday</div>
         </div>
 
         <div class="footer">
@@ -299,16 +242,39 @@
 
 <audio id="fireworksAudio" preload="auto">
     <source src="badri-background-music-ringtone-pawan-kalyan-badri-movie-bgm-music-1682381767.mp3" type="audio/mpeg">
-<!--     <source src="happy-birthday-song-background-music-295823.mp3" type="audio/mpeg">
-    <source src="ms-dhoni-bgm-ringtone-feelx1625923520.mp3" type="audio/mpeg">
-    <source src="moral-of-the-story-x-neeti-mullai-bgm-ringtone-trending-telugu-bgm-bgm-ringtone-trending889944871.mp3" type="audio/mpeg"> -->
 </audio>
 
 <script>
     document.getElementById('showImageButton').addEventListener('click', function() {
-        const image = document.getElementById('groupImage');
-        image.classList.add('show');
-        document.getElementById('fireworksAudio').play();
+        const slides = document.querySelectorAll('.slide');
+        const happyBirthdayText = document.getElementById('happyBirthdayText');
+        const audio = document.getElementById('fireworksAudio');
+        let currentSlide = 0;
+
+        // Show the first slide and play audio
+        slides[currentSlide].classList.add('show');
+        audio.play();
+
+        // Function to show the next slide
+        function showNextSlide() {
+            slides[currentSlide].classList.remove('show');
+            currentSlide++;
+            if (currentSlide < slides.length) {
+                slides[currentSlide].classList.add('show');
+                setTimeout(showNextSlide, 3000); // 3 seconds per slide
+            } else {
+                // Show "Happy Birthday" text on the last slide
+                happyBirthdayText.classList.add('show');
+            }
+        }
+
+        // Start slideshow after 3 seconds if there are more slides
+        if (slides.length > 1) {
+            setTimeout(showNextSlide, 3000);
+        } else {
+            // Show "Happy Birthday" text immediately if only one slide
+            happyBirthdayText.classList.add('show');
+        }
     });
 
     function createGlitter() {
@@ -324,7 +290,7 @@
         star.style.top = `${y}px`;
         setTimeout(() => {
             star.remove();
-        }, 3000);
+        }, 2000); // Match glitter animation duration
     }
 
     setInterval(createGlitter, 200);
@@ -335,7 +301,11 @@
         document.body.appendChild(firefly);
         firefly.style.left = `${Math.random() * window.innerWidth}px`;
         firefly.style.top = `${Math.random() * window.innerHeight}px`;
-        firefly.style.animationDuration = `${Math.random() * 3 + 3}s`;
+        const duration = Math.random() * 3 + 3;
+        firefly.style.animationDuration = `${duration}s`;
+        setTimeout(() => {
+            firefly.remove();
+        }, duration * 1000); // Remove after animation completes
     }
 
     setInterval(createFirefly, 1500);
