@@ -12,6 +12,9 @@
         --text-primary: #E6EDF3;
         --text-secondary: #B0BEC5;
         --accent-color: #4A90E2;
+        --green: #00FF7F;
+        --purple: #800080;
+        --red: #DC143C;
     }
 
     * {
@@ -108,6 +111,16 @@
         margin-top: 30px;
     }
 
+    .sparkle-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 8;
+        pointer-events: none;
+    }
+
     .slide {
         max-width: 100%;
         width: 100%;
@@ -149,32 +162,39 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, 200%) scale(0.3) rotate(10deg);
+        transform: translate(-50%, 200%) scale(0.3) rotateY(60deg);
+        perspective: 1000px;
         font-family: 'Playfair Display', 'Times New Roman', serif;
         font-size: 3.5em;
         font-weight: 700;
-        color: #00FF7F;
-        text-shadow: 0 0 15px #00FF7F, 0 0 25px #800080, 0 0 35px #DC143C;
+        color: var(--green);
+        text-shadow: 0 0 15px var(--green), 0 0 25px var(--purple), 0 0 35px var(--red);
         background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(15, 28, 46, 0.9));
         padding: 20px 40px;
         border-radius: 12px;
-        border: 4px solid #00FF7F;
+        border: 4px solid var(--green);
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
         opacity: 0;
         transition: opacity 1.5s ease, transform 1.5s ease;
         z-index: 10;
-        animation: pulse-glow 3s ease-in-out infinite;
+        animation: pulse-glow 3s ease-in-out infinite, tilt 4s ease-in-out infinite 1.5s;
     }
 
     .happy-birthday.show {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        transform: translate(-50%, -50%) scale(1) rotateY(0deg);
     }
 
     @keyframes pulse-glow {
-        0% { text-shadow: 0 0 15px #00FF7F, 0 0 25px #800080, 0 0 35px #DC143C; }
-        50% { text-shadow: 0 0 25px #00FF7F, 0 0 35px #800080, 0 0 45px #DC143C; }
-        100% { text-shadow: 0 0 15px #00FF7F, 0 0 25px #800080, 0 0 35px #DC143C; }
+        0% { text-shadow: 0 0 15px var(--green), 0 0 25px var(--purple), 0 0 35px var(--red); }
+        50% { text-shadow: 0 0 25px var(--green), 0 0 35px var(--purple), 0 0 45px var(--red); }
+        100% { text-shadow: 0 0 15px var(--green), 0 0 25px var(--purple), 0 0 35px var(--red); }
+    }
+
+    @keyframes tilt {
+        0% { transform: translate(-50%, -50%) scale(1) rotateY(0deg) rotateX(0deg); }
+        50% { transform: translate(-50%, -50%) scale(1) rotateY(5deg) rotateX(3deg); }
+        100% { transform: translate(-50%, -50%) scale(1) rotateY(0deg) rotateX(0deg); }
     }
 
     .happy-birthday::before {
@@ -203,18 +223,25 @@
     .happy-birthday::after {
         content: '';
         position: absolute;
-        top: -10%;
-        left: 0;
-        width: 100%;
-        height: 20%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
-        animation: lens-flare 5s ease-in-out infinite;
-        z-index: 11;
+        top: -100%;
+        left: -100%;
+        width: 300%;
+        height: 300%;
+        background: radial-gradient(circle, rgba(0, 255, 127, 0.3), rgba(128, 0, 128, 0.2), transparent);
+        filter: blur(20px);
+        opacity: 0;
+        animation: aura 3s ease-in-out infinite;
+        z-index: 8;
     }
 
-    @keyframes lens-flare {
-        0% { transform: translateX(-150%); }
-        100% { transform: translateX(150%); }
+    .happy-birthday.show::after {
+        opacity: 0.5;
+    }
+
+    @keyframes aura {
+        0% { transform: scale(0.8); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 0.7; }
+        100% { transform: scale(0.8); opacity: 0.5; }
     }
 
     .happy-birthday .trail {
@@ -239,7 +266,7 @@
         position: absolute;
         width: 15px;
         height: 4px;
-        background: linear-gradient(to right, #00FF7F, #800080);
+        background: linear-gradient(to right, var(--green), var(--purple));
         border-radius: 50%;
         opacity: 0;
         z-index: 12;
@@ -252,20 +279,57 @@
         100% { transform: translate(60px, -40px) rotate(20deg); opacity: 0; }
     }
 
-    .firework {
+    .firework-spark {
         position: absolute;
-        width: 6px;
-        height: 6px;
-        background: radial-gradient(circle, #DC143C, #00FF7F);
+        width: 4px;
+        height: 4px;
+        background: radial-gradient(circle, var(--red), var(--green));
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 12;
+        animation: firework-burst 1.5s ease-in-out forwards;
+    }
+
+    .firework-orb {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: radial-gradient(circle, var(--purple), var(--green));
         border-radius: 50%;
         opacity: 0;
         z-index: 12;
         animation: firework-burst 2s ease-in-out forwards;
     }
 
+    .firework-streamer {
+        position: absolute;
+        width: 12px;
+        height: 3px;
+        background: linear-gradient(to right, var(--green), var(--red));
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 12;
+        animation: firework-burst 2.5s ease-in-out forwards;
+    }
+
     @keyframes firework-burst {
         0% { transform: translate(0, 0) scale(0); opacity: 1; }
         100% { transform: translate(var(--x), var(--y)) scale(1.5); opacity: 0; }
+    }
+
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 20px;
+        background: var(--color);
+        opacity: 0;
+        z-index: 12;
+        animation: confetti-fall 3s ease-in-out forwards;
+    }
+
+    @keyframes confetti-fall {
+        0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+        100% { transform: translate(var(--x), 200px) rotate(var(--r)); opacity: 0; }
     }
 
     .star {
@@ -349,6 +413,7 @@
         <div id="showImageButton" aria-label="Start slideshow and play birthday music">Reveal Memories</div>
 
         <div class="image-container">
+            <canvas class="sparkle-canvas" id="sparkleCanvas"></canvas>
             <img class="slide" src="money1.jpeg" alt="Memory Photo 2">
             <img class="slide" src="money2.jpeg" alt="Memory Photo 3">
             <img class="slide" src="money.jpeg" alt="Memory Photo 1">
@@ -386,7 +451,50 @@
         slides[currentSlide].classList.add('show');
         audio.play();
 
-        // Function to create cinematic comets around the Happy Birthday text
+        // Canvas sparkle effect
+        const canvas = document.getElementById('sparkleCanvas');
+        const ctx = canvas.getContext('2d');
+        let sparks = [];
+        let canvasActive = false;
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createSpark() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2 + 1,
+                opacity: Math.random() * 0.5 + 0.5,
+                speed: Math.random() * 0.5 + 0.5,
+                life: 0,
+                maxLife: 100
+            };
+        }
+
+        function drawSparks() {
+            if (!canvasActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            sparks.forEach(spark => {
+                ctx.beginPath();
+                ctx.arc(spark.x, spark.y, spark.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${spark.opacity})`;
+                ctx.fill();
+                spark.life += spark.speed;
+                spark.opacity = 1 - spark.life / spark.maxLife;
+                if (spark.life >= spark.maxLife) {
+                    sparks.splice(sparks.indexOf(spark), 1);
+                    sparks.push(createSpark());
+                }
+            });
+            requestAnimationFrame(drawSparks);
+        }
+
+        // Function to create cinematic comets
         function createComets() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
@@ -400,39 +508,74 @@
                 comet.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
                 setTimeout(() => {
                     comet.remove();
-                }, 2500); // Match comet animation duration
+                }, 2500);
             }
         }
 
-        // Function to create firework burst on text reveal
+        // Function to create advanced firework burst
         function createFireworks() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
-            function spawnBurst(count, delay) {
+            const colors = ['#00FF7F', '#800080', '#DC143C'];
+            function spawnBurst(count, delay, type) {
                 for (let i = 0; i < count; i++) {
                     const firework = document.createElement('div');
-                    firework.classList.add('firework');
+                    firework.classList.add(`firework-${type}`);
                     document.querySelector('.image-container').appendChild(firework);
-                    const size = Math.random() * 4 + 4; // 4px to 8px
-                    firework.style.width = `${size}px`;
-                    firework.style.height = `${size}px`;
-                    const angle = Math.random() * 360; // Random angle for radial spread
-                    const distance = Math.random() * 80 + 40; // 40px to 120px
+                    const angle = Math.random() * 360;
+                    const distance = type === 'spark' ? Math.random() * 80 + 40 : Math.random() * 100 + 50;
                     const x = Math.cos(angle * Math.PI / 180) * distance;
-                    const y = Math.sin(angle * Math.PI / 180) * distance;
+                    const y = type === 'spark' ? Math.sin(angle * Math.PI / 180) * distance + 20 : Math.sin(angle * Math.PI / 180) * distance;
                     firework.style.setProperty('--x', `${x}px`);
                     firework.style.setProperty('--y', `${y}px`);
+                    firework.style.background = type === 'spark' ? `radial-gradient(circle, ${colors[Math.floor(Math.random() * 3)]}, #fff)` : firework.style.background;
                     const offsetX = (Math.random() - 0.5) * happyBirthdayRect.width * 0.5;
                     const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 0.5;
                     firework.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
                     firework.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
                     setTimeout(() => {
                         firework.remove();
-                    }, 2000); // Match firework animation duration
+                    }, type === 'spark' ? 1500 : type === 'orb' ? 2000 : 2500);
                 }
             }
-            spawnBurst(12, 0); // First burst
-            setTimeout(() => spawnBurst(12, 500), 500); // Second burst after 0.5s
+            spawnBurst(4, 0, 'spark');
+            spawnBurst(4, 0, 'orb');
+            spawnBurst(4, 0, 'streamer');
+            setTimeout(() => {
+                spawnBurst(4, 500, 'spark');
+                spawnBurst(4, 500, 'orb');
+                spawnBurst(4, 500, 'streamer');
+            }, 500);
+            setTimeout(() => {
+                spawnBurst(4, 1000, 'spark');
+                spawnBurst(4, 1000, 'orb');
+                spawnBurst(4, 1000, 'streamer');
+            }, 1000);
+        }
+
+        // Function to create confetti
+        function createConfetti() {
+            const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
+            const containerRect = document.querySelector('.image-container').getBoundingClientRect();
+            const colors = ['#00FF7F', '#800080', '#DC143C'];
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                document.querySelector('.image-container').appendChild(confetti);
+                const angle = Math.random() * 360;
+                const distance = Math.random() * 100 + 50;
+                const x = Math.cos(angle * Math.PI / 180) * distance;
+                confetti.style.setProperty('--x', `${x}px`);
+                confetti.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
+                confetti.style.setProperty('--color', colors[Math.floor(Math.random() * 3)]);
+                const offsetX = (Math.random() - 0.5) * happyBirthdayRect.width * 0.5;
+                const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 0.5;
+                confetti.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
+                confetti.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                setTimeout(() => {
+                    confetti.remove();
+                }, 3000);
+            }
         }
 
         // Function to show the next slide
@@ -441,33 +584,40 @@
             currentSlide++;
             if (currentSlide < slides.length) {
                 if (currentSlide === slides.length - 1) {
-                    // Trigger fade-to-black before showing the last slide
+                    // Trigger fade-to-black and sparkles
                     fadeOverlay.classList.add('show');
+                    canvasActive = true;
+                    sparks = Array(20).fill().map(createSpark);
+                    drawSparks();
                     setTimeout(() => {
                         slides[currentSlide].classList.add('show');
                         happyBirthdayText.classList.add('show');
                         fadeOverlay.classList.remove('show');
-                        createFireworks(); // Trigger firework bursts
-                        setInterval(createComets, 800); // Start comets
-                    }, 1000); // Fade duration
+                        createFireworks();
+                        createConfetti();
+                        setInterval(createComets, 800);
+                    }, 1000);
                 } else {
                     slides[currentSlide].classList.add('show');
-                    setTimeout(showNextSlide, 10000); // Next slide after 10 seconds
+                    setTimeout(showNextSlide, 10000);
                 }
             }
         }
 
-        // Start slideshow after 10 seconds if there are more slides
+        // Start slideshow
         if (slides.length > 1) {
             setTimeout(showNextSlide, 10000);
         } else {
-            // Show "Happy Birthday" text and effects immediately if only one slide
             fadeOverlay.classList.add('show');
+            canvasActive = true;
+            sparks = Array(20).fill().map(createSpark);
+            drawSparks();
             setTimeout(() => {
                 slides[currentSlide].classList.add('show');
                 happyBirthdayText.classList.add('show');
                 fadeOverlay.classList.remove('show');
                 createFireworks();
+                createConfetti();
                 setInterval(createComets, 800);
             }, 1000);
         }
@@ -486,7 +636,7 @@
         star.style.top = `${y}px`;
         setTimeout(() => {
             star.remove();
-        }, 2000); // Match glitter animation duration
+        }, 2000);
     }
 
     setInterval(createGlitter, 200);
@@ -501,7 +651,7 @@
         firefly.style.animationDuration = `${duration}s`;
         setTimeout(() => {
             firefly.remove();
-        }, duration * 1000); // Remove after animation completes
+        }, duration * 1000);
     }
 
     setInterval(createFirefly, 1500);
