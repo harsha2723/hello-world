@@ -113,7 +113,7 @@
         visibility: hidden;
         opacity: 0;
         transform: scale(0.8);
-        transition: opacity 12s ease, transform 12s ease;
+        transition: opacity 1s ease, transform 1s ease;
         position: absolute;
         top: 0;
         left: 0;
@@ -137,6 +137,7 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         opacity: 0;
         transition: opacity 1s ease;
+        z-index: 10; /* Ensure text appears above image */
     }
 
     .happy-birthday.show {
@@ -261,16 +262,17 @@
             currentSlide++;
             if (currentSlide < slides.length) {
                 slides[currentSlide].classList.add('show');
-                setTimeout(showNextSlide, 3000); // 3 seconds per slide
-            } else {
-                // Show "Happy Birthday" text on the last slide
-                happyBirthdayText.classList.add('show');
+                // Show "Happy Birthday" text only on the last slide
+                if (currentSlide === slides.length - 1) {
+                    happyBirthdayText.classList.add('show');
+                }
+                setTimeout(showNextSlide, 16000); // 16 seconds per slide
             }
         }
 
-        // Start slideshow after 3 seconds if there are more slides
+        // Start slideshow after 16 seconds if there are more slides
         if (slides.length > 1) {
-            setTimeout(showNextSlide, 3000);
+            setTimeout(showNextSlide, 16000);
         } else {
             // Show "Happy Birthday" text immediately if only one slide
             happyBirthdayText.classList.add('show');
