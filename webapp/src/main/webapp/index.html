@@ -106,7 +106,7 @@
         height: auto;
         overflow: hidden;
         margin-top: 30px;
-        box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); /* Vignette effect */
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
     }
 
     .slide {
@@ -129,20 +129,37 @@
         position: relative;
     }
 
+    .fade-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 1);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 15;
+        transition: opacity 1s ease;
+    }
+
+    .fade-overlay.show {
+        opacity: 1;
+    }
+
     .happy-birthday {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, 200%) scale(0.5);
+        transform: translate(-50%, 200%) scale(0.3) rotate(10deg);
         font-family: 'Playfair Display', 'Times New Roman', serif;
         font-size: 3.5em;
         font-weight: 700;
-        color: #FFD700;
-        text-shadow: 0 0 15px #FFD700, 0 0 25px #FF1493, 0 0 35px #00CED1;
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(15, 28, 46, 0.8));
+        color: #00FF7F;
+        text-shadow: 0 0 15px #00FF7F, 0 0 25px #800080, 0 0 35px #DC143C;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(15, 28, 46, 0.9));
         padding: 20px 40px;
         border-radius: 12px;
-        border: 4px solid #FFD700;
+        border: 4px solid #00FF7F;
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
         opacity: 0;
         transition: opacity 1.5s ease, transform 1.5s ease;
@@ -152,13 +169,13 @@
 
     .happy-birthday.show {
         opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
     }
 
     @keyframes pulse-glow {
-        0% { text-shadow: 0 0 15px #FFD700, 0 0 25px #FF1493, 0 0 35px #00CED1; }
-        50% { text-shadow: 0 0 25px #FFD700, 0 0 35px #FF1493, 0 0 45px #00CED1; }
-        100% { text-shadow: 0 0 15px #FFD700, 0 0 25px #FF1493, 0 0 35px #00CED1; }
+        0% { text-shadow: 0 0 15px #00FF7F, 0 0 25px #800080, 0 0 35px #DC143C; }
+        50% { text-shadow: 0 0 25px #00FF7F, 0 0 35px #800080, 0 0 45px #DC143C; }
+        100% { text-shadow: 0 0 15px #00FF7F, 0 0 25px #800080, 0 0 35px #DC143C; }
     }
 
     .happy-birthday::before {
@@ -168,9 +185,9 @@
         left: -50%;
         width: 200%;
         height: 200%;
-        background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+        background: radial-gradient(circle, rgba(0, 255, 127, 0.4), rgba(128, 0, 128, 0.2), transparent);
         opacity: 0;
-        animation: starburst 2s ease-in-out infinite;
+        animation: starburst 2.5s ease-in-out infinite;
         z-index: 9;
     }
 
@@ -180,7 +197,7 @@
 
     @keyframes starburst {
         0% { transform: scale(0.5); opacity: 0.5; }
-        50% { transform: scale(1.2); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 1; }
         100% { transform: scale(0.5); opacity: 0.5; }
     }
 
@@ -201,11 +218,29 @@
         100% { transform: translateX(150%); }
     }
 
+    .happy-birthday .trail {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0, 255, 127, 0.5), transparent);
+        opacity: 0;
+        transform: translateY(50%);
+        transition: opacity 1s ease, transform 1s ease;
+        z-index: 9;
+    }
+
+    .happy-birthday.show .trail {
+        opacity: 0.7;
+        transform: translateY(0);
+    }
+
     .comet {
         position: absolute;
-        width: 12px;
-        height: 3px;
-        background: linear-gradient(to right, #FFD700, #FF1493);
+        width: 15px;
+        height: 4px;
+        background: linear-gradient(to right, #00FF7F, #800080);
         border-radius: 50%;
         opacity: 0;
         z-index: 12;
@@ -213,9 +248,25 @@
     }
 
     @keyframes comet-animation {
-        0 aufsagen
-0% { transform: translate(0, 0) scale(1); opacity: 1; }
-        100% { transform: translate(20px, -30px) scale(0.5); opacity: 0; }
+        0% { transform: translate(0, 0) scale(1); opacity: 1; }
+        50% { transform: translate(30px, -20px) rotate(10deg); opacity: 0.7; }
+        100% { transform: translate(60px, -40px) rotate(20deg); opacity: 0; }
+    }
+
+    .firework {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: radial-gradient(circle, #DC143C, #00FF7F);
+        border-radius: 50%;
+        opacity: 0;
+        z-index: 12;
+        animation: firework-burst 1.5s ease-in-out forwards;
+    }
+
+    @keyframes firework-burst {
+        0% { transform: translate(0, 0) scale(0); opacity: 1; }
+        100% { transform: translate(0, -60px) scale(1.5); opacity: 0; }
     }
 
     .star {
@@ -279,7 +330,7 @@
           <br><br>
           Dear Lekshmi,<br><br>
           Good day.<br><br>
-          I've had the privilege of sharing my knowledge with some of your closest friends, like Sara and Krishna, and even had the chance to deploy their images as web apps on a server. Today feels like a special moment—one that I want to dedicate to you, especially since it's a significant day in your life. Yes, you're right—if you're thinking about your birthday, you’ll find something at the bottom when you click the "Reveal Memories" button and use your head phones.<br><br>
+          I've had the privilege of sharing my knowledge with some of your closest friends, like Sara and Krishna, and even had the chance to deploy their images as web apps on a server. Today feels like a special moment—one that I want to dedicate to you, especially since it's a significant day in your life. Yes, you're right—if you're thinking about your birthday, you’ll find something at the bottom when you click the "Reveal Memories" button and use your headphones.<br><br>
           Beyond that, there’s something personal I’ve never had the courage to express face to face.<br><br>
           Since the day you joined Terawe, I’ve quietly observed the depth of your maturity and character. From both what I’ve seen and heard from your friends, it's clear how much you value meaningful friendships and how thoughtfully you navigate the complexities of life—especially when it comes to matters of the heart.<br><br>
           To me, love isn’t just an emotion. It’s about living life alongside someone, supporting them through every high and low, understanding them completely, and above all, having the capacity to forgive.<br><br>In my eyes, real love is about emotional maturity—the ability to forgive despite the pain, and to continue caring even when things get difficult. That kind of love is rare, and it’s what I believe in.<br><br>
@@ -302,7 +353,10 @@
             <img class="slide" src="money1.jpeg" alt="Memory Photo 2">
             <img class="slide" src="money2.jpeg" alt="Memory Photo 3">
             <img class="slide" src="money.jpeg" alt="Memory Photo 1">
-            <div class="happy-birthday" id="happyBirthdayText">Happy Birthday</div>
+            <div class="happy-birthday" id="happyBirthdayText">
+                <span class="trail"></span>
+                Happy Birthday
+            </div>
         </div>
 
         <div class="footer">
@@ -315,6 +369,8 @@
     </div>
 </div>
 
+<div class="fade-overlay" id="fadeOverlay"></div>
+
 <audio id="fireworksAudio" preload="auto">
     <source src="badri-background-music-ringtone-pawan-kalyan-badri-movie-bgm-music-1682381767.mp3" type="audio/mpeg">
 </audio>
@@ -323,6 +379,7 @@
     document.getElementById('showImageButton').addEventListener('click', function() {
         const slides = document.querySelectorAll('.slide');
         const happyBirthdayText = document.getElementById('happyBirthdayText');
+        const fadeOverlay = document.getElementById('fadeOverlay');
         const audio = document.getElementById('fireworksAudio');
         let currentSlide = 0;
 
@@ -334,11 +391,10 @@
         function createComets() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 8; i++) {
                 const comet = document.createElement('div');
                 comet.classList.add('comet');
                 document.querySelector('.image-container').appendChild(comet);
-                // Position comets around the text
                 const offsetX = (Math.random() - 0.5) * happyBirthdayRect.width * 1.5;
                 const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 1.5;
                 comet.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
@@ -349,19 +405,42 @@
             }
         }
 
+        // Function to create firework burst on text reveal
+        function createFireworks() {
+            const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
+            const containerRect = document.querySelector('.image-container').getBoundingClientRect();
+            for (let i = 0; i < 12; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                document.querySelector('.image-container').appendChild(firework);
+                const offsetX = (Math.random() - 0.5) * happyBirthdayRect.width * 2;
+                const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 2;
+                firework.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
+                firework.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                setTimeout(() => {
+                    firework.remove();
+                }, 1500); // Match firework animation duration
+            }
+        }
+
         // Function to show the next slide
         function showNextSlide() {
             slides[currentSlide].classList.remove('show');
             currentSlide++;
             if (currentSlide < slides.length) {
-                slides[currentSlide].classList.add('show');
-                // Show "Happy Birthday" text and comets on the last slide
                 if (currentSlide === slides.length - 1) {
-                    happyBirthdayText.classList.add('show');
-                    setInterval(createComets, 800); // Create comets every 0.8s
+                    // Trigger fade-to-black before showing the last slide
+                    fadeOverlay.classList.add('show');
+                    setTimeout(() => {
+                        slides[currentSlide].classList.add('show');
+                        happyBirthdayText.classList.add('show');
+                        fadeOverlay.classList.remove('show');
+                        createFireworks(); // Trigger firework burst once
+                        setInterval(createComets, 800); // Start comets
+                    }, 1000); // Fade duration
                 } else {
-                    // Show next slide after 10 seconds for first two images
-                    setTimeout(showNextSlide, 10000);
+                    slides[currentSlide].classList.add('show');
+                    setTimeout(showNextSlide, 10000); // Next slide after 10 seconds
                 }
             }
         }
@@ -370,9 +449,15 @@
         if (slides.length > 1) {
             setTimeout(showNextSlide, 10000);
         } else {
-            // Show "Happy Birthday" text and comets immediately if only one slide
-            happyBirthdayText.classList.add('show');
-            setInterval(createComets, 800);
+            // Show "Happy Birthday" text and effects immediately if only one slide
+            fadeOverlay.classList.add('show');
+            setTimeout(() => {
+                slides[currentSlide].classList.add('show');
+                happyBirthdayText.classList.add('show');
+                fadeOverlay.classList.remove('show');
+                createFireworks();
+                setInterval(createComets, 800);
+            }, 1000);
         }
     });
 
