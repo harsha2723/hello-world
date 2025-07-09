@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>When the Heart Writes..</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 
@@ -111,7 +112,7 @@
         margin-top: 30px;
     }
 
-    .sparkle-canvas {
+    .webgl-canvas {
         position: absolute;
         top: 0;
         left: 0;
@@ -119,6 +120,12 @@
         height: 100%;
         z-index: 8;
         pointer-events: none;
+        opacity: 0;
+        transition: opacity 1s ease;
+    }
+
+    .webgl-canvas.active {
+        opacity: 1;
     }
 
     .slide {
@@ -132,6 +139,7 @@
         position: absolute;
         top: 0;
         left: 0;
+        filter: brightness(1.2); /* Increase brightness by 20% */
     }
 
     .slide.show {
@@ -413,10 +421,10 @@
         <div id="showImageButton" aria-label="Start slideshow and play birthday music">Reveal Memories</div>
 
         <div class="image-container">
-            <canvas class="sparkle-canvas" id="sparkleCanvas"></canvas>
-            <img class="slide" src="money1.jpeg" alt="Memory Photo 2">
-            <img class="slide" src="money2.jpeg" alt="Memory Photo 3">
-            <img class="slide" src="money.jpeg" alt="Memory Photo 1">
+            <canvas class="webgl-canvas" id="webglCanvas"></canvas>
+            <img class="slide" src="money1.jpeg" alt="Memory Photo 1">
+            <img class="slide" src="money2.jpeg" alt="Memory Photo 2">
+            <img class="slide" src="money.jpeg" alt="Memory Photo 3">
             <div class="happy-birthday" id="happyBirthdayText">
                 <span class="trail"></span>
                 Happy Birthday
@@ -451,50 +459,90 @@
         slides[currentSlide].classList.add('show');
         audio.play();
 
-        // Canvas sparkle effect
-        const canvas = document.getElementById('sparkleCanvas');
-        const ctx = canvas.getContext('2d');
-        let sparks = [];
-        let canvasActive = false;
+        // WebGL setup
+        const canvas = document.getElementById('webglCanvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+        let webglActive = false;
 
         function resizeCanvas() {
             canvas.width = canvas.parentElement.offsetWidth;
             canvas.height = canvas.parentElement.offsetHeight;
+            renderer.setSize(canvas.width, canvas.height);
+            camera.aspect = canvas.width / canvas.height;
+            camera.updateProjectionMatrix();
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        function createSpark() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2 + 1,
-                opacity: Math.random() * 0.5 + 0.5,
-                speed: Math.random() * 0.5 + 0.5,
-                life: 0,
-                maxLife: 100
-            };
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particleCount = 100;
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        const sizes = new Float32Array(particleCount);
+        const colorChoices = [
+            [0, 1, 0.5], // Green (#00FF7F)
+            [0.5, 0, 0.5], // Purple (#800080)
+            [0.86, 0.08, 0.24] // Red (#DC143C)
+        ];
+
+        for (let i = 0; i < particleCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+            sizes[i] = Math.random() * 0.1 + 0.05;
+            const color = colorChoices[Math.floor(Math.random() * 3)];
+            colors[i * 3] = color[0];
+            colors[i * 3 + 1] = color[1];
+            colors[i * 3 + 2] = color[2];
         }
 
-        function drawSparks() {
-            if (!canvasActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            sparks.forEach(spark => {
-                ctx.beginPath();
-                ctx.arc(spark.x, spark.y, spark.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${spark.opacity})`;
-                ctx.fill();
-                spark.life += spark.speed;
-                spark.opacity = 1 - spark.life / spark.maxLife;
-                if (spark.life >= spark.maxLife) {
-                    sparks.splice(sparks.indexOf(spark), 1);
-                    sparks.push(createSpark());
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        particlesGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+        const particleMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 }
+            },
+            vertexShader: `
+                attribute float size;
+                varying vec3 vColor;
+                uniform float uTime;
+                void main() {
+                    vColor = color;
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    gl_PointSize = size * (300.0 / -mvPosition.z);
+                    gl_Position = projectionMatrix * mvPosition;
+                    gl_PointSize *= (1.0 + sin(uTime + position.x) * 0.5);
                 }
-            });
-            requestAnimationFrame(drawSparks);
+            `,
+            fragmentShader: `
+                varying vec3 vColor;
+                void main() {
+                    float dist = length(gl_PointCoord - vec2(0.5));
+                    if (dist > 0.5) discard;
+                    gl_FragColor = vec4(vColor, 0.8 - dist);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particles = new THREE.Points(particlesGeometry, particleMaterial);
+        scene.add(particles);
+        camera.position.z = 5;
+
+        function animateWebGL() {
+            if (!webglActive) return;
+            requestAnimationFrame(animateWebGL);
+            particleMaterial.uniforms.uTime.value += 0.05;
+            particles.rotation.y += 0.01;
+            renderer.render(scene, camera);
         }
 
-        // Function to create cinematic comets
+        // Function to create comets
         function createComets() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
@@ -512,7 +560,7 @@
             }
         }
 
-        // Function to create advanced firework burst
+        // Function to create fireworks
         function createFireworks() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
@@ -584,11 +632,11 @@
             currentSlide++;
             if (currentSlide < slides.length) {
                 if (currentSlide === slides.length - 1) {
-                    // Trigger fade-to-black and sparkles
+                    // Trigger fade-to-black and WebGL
                     fadeOverlay.classList.add('show');
-                    canvasActive = true;
-                    sparks = Array(20).fill().map(createSpark);
-                    drawSparks();
+                    canvas.classList.add('active');
+                    webglActive = true;
+                    animateWebGL();
                     setTimeout(() => {
                         slides[currentSlide].classList.add('show');
                         happyBirthdayText.classList.add('show');
@@ -609,9 +657,9 @@
             setTimeout(showNextSlide, 10000);
         } else {
             fadeOverlay.classList.add('show');
-            canvasActive = true;
-            sparks = Array(20).fill().map(createSpark);
-            drawSparks();
+            canvas.classList.add('active');
+            webglActive = true;
+            animateWebGL();
             setTimeout(() => {
                 slides[currentSlide].classList.add('show');
                 happyBirthdayText.classList.add('show');
