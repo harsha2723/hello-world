@@ -134,14 +134,26 @@
         color: #FFD700;
         font-size: 2.5em;
         font-weight: 700;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FF6F61;
+        background-color: rgba(15, 28, 46, 0.7);
+        padding: 15px 30px;
+        border-radius: 12px;
+        border: 2px solid #FFD700;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
         opacity: 0;
         transition: opacity 1s ease;
-        z-index: 10; /* Ensure text appears above image */
+        z-index: 10;
+        animation: bounce-glow 2s ease-in-out infinite;
     }
 
     .happy-birthday.show {
         opacity: 1;
+    }
+
+    @keyframes bounce-glow {
+        0% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-50%, -50%) scale(1.1); }
+        100% { transform: translate(-50%, -50%) scale(1); }
     }
 
     .star {
@@ -192,7 +204,7 @@
         h1 { font-size: 2em; }
         .message { font-size: 1em; }
         #showImageButton { padding: 10px 20px; font-size: 0.9em; }
-        .happy-birthday { font-size: 1.5em; }
+        .happy-birthday { font-size: 1.5em; padding: 10px 20px; }
     }
 </style>
 </head>
@@ -265,14 +277,16 @@
                 // Show "Happy Birthday" text only on the last slide
                 if (currentSlide === slides.length - 1) {
                     happyBirthdayText.classList.add('show');
+                } else {
+                    // Show next slide after 10 seconds for first two images
+                    setTimeout(showNextSlide, 10000);
                 }
-                setTimeout(showNextSlide, 16000); // 16 seconds per slide
             }
         }
 
-        // Start slideshow after 16 seconds if there are more slides
+        // Start slideshow after 10 seconds if there are more slides
         if (slides.length > 1) {
-            setTimeout(showNextSlide, 16000);
+            setTimeout(showNextSlide, 10000);
         } else {
             // Show "Happy Birthday" text immediately if only one slide
             happyBirthdayText.classList.add('show');
