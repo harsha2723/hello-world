@@ -260,12 +260,12 @@
         border-radius: 50%;
         opacity: 0;
         z-index: 12;
-        animation: firework-burst 1.5s ease-in-out forwards;
+        animation: firework-burst 2s ease-in-out forwards;
     }
 
     @keyframes firework-burst {
         0% { transform: translate(0, 0) scale(0); opacity: 1; }
-        100% { transform: translate(0, -60px) scale(1.5); opacity: 0; }
+        100% { transform: translate(var(--x), var(--y)) scale(1.5); opacity: 0; }
     }
 
     .star {
@@ -408,18 +408,31 @@
         function createFireworks() {
             const happyBirthdayRect = happyBirthdayText.getBoundingClientRect();
             const containerRect = document.querySelector('.image-container').getBoundingClientRect();
-            for (let i = 0; i < 12; i++) {
-                const firework = document.createElement('div');
-                firework.classList.add('firework');
-                document.querySelector('.image-container').appendChild(firework);
-                const offsetX = (Math.random() - 0.5) * happyBirthdayRect.width * 2;
-                const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 2;
-                firework.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
-                firework.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
-                setTimeout(() => {
-                    firework.remove();
-                }, 1500); // Match firework animation duration
+            function spawnBurst(count, delay) {
+                for (let i = 0; i < count; i++) {
+                    const firework = document.createElement('div');
+                    firework.classList.add('firework');
+                    document.querySelector('.image-container').appendChild(firework);
+                    const size = Math.random() * 4 + 4; // 4px to 8px
+                    firework.style.width = `${size}px`;
+                    firework.style.height = `${size}px`;
+                    const angle = Math.random() * 360; // Random angle for radial spread
+                    const distance = Math.random() * 80 + 40; // 40px to 120px
+                    const x = Math.cos(angle * Math.PI / 180) * distance;
+                    const y = Math.sin(angle * Math.PI / 180) * distance;
+                    firework.style.setProperty('--x', `${x}px`);
+                    firework.style.setProperty('--y', `${y}px`);
+                    const offsetX = (Math.random() - 0.5) * happyBirthdayRect.width * 0.5;
+                    const offsetY = (Math.random() - 0.5) * happyBirthdayRect.height * 0.5;
+                    firework.style.left = `${happyBirthdayRect.left - containerRect.left + happyBirthdayRect.width / 2 + offsetX}px`;
+                    firework.style.top = `${happyBirthdayRect.top - containerRect.top + happyBirthdayRect.height / 2 + offsetY}px`;
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 2000); // Match firework animation duration
+                }
             }
+            spawnBurst(12, 0); // First burst
+            setTimeout(() => spawnBurst(12, 500), 500); // Second burst after 0.5s
         }
 
         // Function to show the next slide
@@ -434,7 +447,7 @@
                         slides[currentSlide].classList.add('show');
                         happyBirthdayText.classList.add('show');
                         fadeOverlay.classList.remove('show');
-                        createFireworks(); // Trigger firework burst once
+                        createFireworks(); // Trigger firework bursts
                         setInterval(createComets, 800); // Start comets
                     }, 1000); // Fade duration
                 } else {
